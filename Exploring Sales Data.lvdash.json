@@ -1,0 +1,298 @@
+{
+  "datasets": [
+    {
+      "name": "4e57cd98",
+      "displayName": "Aggregate Sales Summary Report",
+      "queryLines": [
+        "-- Total sales\r\n",
+        "SELECT SUM(sales_amount) AS total_sales FROM workspace.databricks_analytics.fact_sales;"
+      ]
+    },
+    {
+      "name": "b19b1fd9",
+      "displayName": "Unique Customer Count Summary",
+      "queryLines": [
+        "-- Total customers\r\n",
+        "SELECT COUNT(DISTINCT customer_key) AS total_customers FROM workspace.databricks_analytics.dim_customers;"
+      ]
+    },
+    {
+      "name": "aa7731ca",
+      "displayName": "Unique Product Count Summary",
+      "queryLines": [
+        "-- Total products\r\n",
+        "SELECT COUNT(DISTINCT product_key) AS total_products FROM workspace.databricks_analytics.dim_products;"
+      ]
+    },
+    {
+      "name": "9d885a74",
+      "displayName": "Total Unique Orders Count",
+      "queryLines": [
+        "-- Total orders\r\n",
+        "SELECT COUNT(DISTINCT order_number) AS total_orders FROM workspace.databricks_analytics.fact_sales;"
+      ]
+    },
+    {
+      "name": "db0533b6",
+      "displayName": "Sales Performance Overview",
+      "queryLines": [
+        "-- Sales by product\r\n",
+        "SELECT product_key, SUM(sales_amount) AS sales_by_product FROM workspace.databricks_analytics.fact_sales GROUP BY product_key;"
+      ]
+    },
+    {
+      "name": "b4841175",
+      "displayName": "Sales Insights by Product Category",
+      "queryLines": [
+        "-- Sales by category\r\n",
+        "SELECT p.category, SUM(f.sales_amount) AS sales_by_category\r\n",
+        "FROM workspace.databricks_analytics.fact_sales f\r\n",
+        "JOIN workspace.databricks_analytics.dim_products p ON f.product_key = p.product_key\r\n",
+        "GROUP BY p.category;"
+      ]
+    },
+    {
+      "name": "494ed780",
+      "displayName": "Order Trends Analysis Over Time",
+      "queryLines": [
+        "-- Orders over time\r\n",
+        "SELECT order_date, COUNT(DISTINCT order_number) AS orders_count\r\n",
+        "FROM workspace.databricks_analytics.fact_sales\r\n",
+        "GROUP BY order_date\r\n",
+        "ORDER BY order_date;"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "56eb35df",
+      "displayName": "Exploring Sales Data",
+      "layout": [
+        {
+          "widget": {
+            "name": "7ae16abc",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "b4841175",
+                  "fields": [
+                    {
+                      "name": "category",
+                      "expression": "`category`"
+                    },
+                    {
+                      "name": "sales_by_category",
+                      "expression": "`sales_by_category`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Sales by Product Category Overview",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "category",
+                  "displayName": "category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sales_by_category",
+                  "displayName": "Sales by Category",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "category",
+                  "legend": {
+                    "position": "right"
+                  },
+                  "displayName": "category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "f054b12d",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "494ed780",
+                  "fields": [
+                    {
+                      "name": "order_date",
+                      "expression": "`order_date`"
+                    },
+                    {
+                      "name": "orders_count",
+                      "expression": "`orders_count`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Orders Over Time",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "order_date",
+                  "displayName": "Order Date",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "orders_count",
+                  "displayName": "Orders Count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "order_date",
+                  "displayName": "Order Date",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "8868fbec",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "db0533b6",
+                  "fields": [
+                    {
+                      "name": "product_key",
+                      "expression": "`product_key`"
+                    },
+                    {
+                      "name": "sales_by_product",
+                      "expression": "`sales_by_product`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Sales Performance Overview",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "product_key",
+                  "displayName": "Product",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sales_by_product",
+                  "displayName": "Sales by Product",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "product_key",
+                  "legend": {
+                    "position": "right"
+                  },
+                  "displayName": "Product",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 12,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "f8c79d56",
+      "displayName": "Global Filters",
+      "layout": [
+        {
+          "widget": {
+            "name": "8634b6bd",
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {},
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
